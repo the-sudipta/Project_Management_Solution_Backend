@@ -3,10 +3,10 @@
 require_once __DIR__ . '/../model/db_connect.php';
 
 
-function findAllCustomers()
+function findAllVerification()
 {
     $conn = db_conn();
-    $selectQuery = 'SELECT * FROM `customer`';
+    $selectQuery = 'SELECT * FROM `verification`';
 
     try {
         $result = $conn->query($selectQuery);
@@ -25,7 +25,7 @@ function findAllCustomers()
 
         // Check for an empty result set
         if (empty($rows)) {
-            throw new Exception("No rows found in the 'customer' table.");
+            throw new Exception("No rows found in the 'verification' table.");
         }
 
         return $rows;
@@ -39,54 +39,10 @@ function findAllCustomers()
 }
 
 
-function findCustomerByUserID($id)
+function findVerificationByID($id)
 {
     $conn = db_conn();
-    $selectQuery = 'SELECT * FROM `customer` WHERE `user_id` = ?';
-
-    try {
-        $stmt = $conn->prepare($selectQuery);
-
-        // Check if the prepare statement was successful
-        if (!$stmt) {
-            throw new Exception("Prepare statement failed: " . $conn->error);
-        }
-
-        // Bind the parameter
-        $stmt->bind_param("i", $id);
-
-        // Execute the query
-        $stmt->execute();
-
-        // Get the result
-        $result = $stmt->get_result();
-
-        // Fetch the user as an associative array
-        $user = $result->fetch_assoc();
-
-        // Check for an empty result set
-        if (!$user) {
-            throw new Exception("No Customer Details found with the User ID: " . $id);
-        }
-
-        // Close the statement
-        $stmt->close();
-
-        return $user;
-    } catch (Exception $e) {
-        echo "Error: " . $e->getMessage();
-        return null;
-    } finally {
-        // Close the database connection
-        $conn->close();
-    }
-}
-
-
-function findCustomerByID($id)
-{
-    $conn = db_conn();
-    $selectQuery = 'SELECT * FROM `customer` WHERE `id` = ?';
+    $selectQuery = 'SELECT * FROM `verification` WHERE `id` = ?';
 
     try {
         $stmt = $conn->prepare($selectQuery);
@@ -127,15 +83,19 @@ function findCustomerByID($id)
 }
 
 
-function updateCustomer($name, $gender, $phone, $id)
+function updateVerification($email, $token, $verification_code, $status, $action, $created_at, $verified_at, $id)
 {
     $conn = db_conn();
 
     // Construct the SQL query
-    $updateQuery = "UPDATE `customer` SET 
-                    name = ?,
-                    gender = ?,
-                    phone = ?
+    $updateQuery = "UPDATE `verification` SET 
+                    email = ?,
+                    token = ?,
+                    verification_code = ?,
+                    status = ?,
+                    action = ?,
+                    created_at = ?,
+                    verified_at = ?
                     WHERE id = ?";
 
     try {
@@ -148,7 +108,7 @@ function updateCustomer($name, $gender, $phone, $id)
         }
 
         // Bind parameters
-        $stmt->bind_param('sssi', $name, $gender, $phone, $id);
+        $stmt->bind_param('sssssssi', $email, $token, $verification_code, $status, $action, $created_at, $verified_at, $id);
 
         // Execute the query
         $stmt->execute();
@@ -169,53 +129,11 @@ function updateCustomer($name, $gender, $phone, $id)
 }
 
 
-function updateCustomerByUserID($name, $gender, $phone, $user_id)
-{
+function deleteVerification($id) {
     $conn = db_conn();
 
     // Construct the SQL query
-    $updateQuery = "UPDATE `customer` SET 
-                    name = ?,
-                    gender = ?,
-                    phone = ?
-                    WHERE user_id = ?";
-
-    try {
-        // Prepare the statement
-        $stmt = $conn->prepare($updateQuery);
-
-        // Check if the prepare statement was successful
-        if (!$stmt) {
-            throw new Exception("Prepare statement failed: " . $conn->error);
-        }
-
-        // Bind parameters
-        $stmt->bind_param('sssi', $name, $gender, $phone, $user_id);
-
-        // Execute the query
-        $stmt->execute();
-
-        // Return true if the update is successful
-        return true;
-    } catch (Exception $e) {
-        // Handle the exception, you might want to log it or return false
-        echo "Error: " . $e->getMessage();
-        return false;
-    } finally {
-        // Close the statement
-        $stmt->close();
-
-        // Close the database connection
-        $conn->close();
-    }
-}
-
-
-function deleteCustomer($id) {
-    $conn = db_conn();
-
-    // Construct the SQL query
-    $updateQuery = "DELETE FROM `customer`
+    $updateQuery = "DELETE FROM `verification`
                     WHERE id = ?";
 
     try {
@@ -245,23 +163,22 @@ function deleteCustomer($id) {
 
         // Close the database connection
         $conn->close();
-
     }
 }
 
 
-function createCustomer($name, $gender, $phone, $profession, $university_name, $university_id, $company_name, $created_at, $user_id) {
+function createVerification($email, $token, $verification_code, $status, $action, $created_at, $verified_at) {
     $conn = db_conn();
 
     // Construct the SQL query
-    $insertQuery = "INSERT INTO `customer` (name, gender, phone, profession, university_name, university_id, company_name, created_at, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $insertQuery = "INSERT INTO `verification` (email, token, verification_code, status, action, created_at, verified_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     try {
         // Prepare the statement
         $stmt = $conn->prepare($insertQuery);
 
         // Bind parameters
-        $stmt->bind_param('ssssssssi', $name, $gender, $phone, $profession, $university_name, $university_id, $company_name, $created_at, $user_id);
+        $stmt->bind_param('sssssss', $email, $token, $verification_code, $status, $action, $created_at, $verified_at);
 
         // Execute the query
         $stmt->execute();

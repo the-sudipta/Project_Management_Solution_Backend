@@ -256,7 +256,6 @@ function deleteUser($id) {
 
         // Close the database connection
         $conn->close();
-        $data['status'] = "De-Activated";
     }
 }
 
