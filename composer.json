@@ -1,0 +1,9 @@
+{
+  "require": {
+    "ext-mysqli": "*",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.6"
+  }
+}

@@ -1,0 +1,52 @@
+# Composer dependencies
+/vendor/
+
+# Composer specific files
+composer.lock
+composer.phar
+
+# PHPStorm project files
+.idea/
+
+# PHP unit test results
+.phpunit.result.cache
+
+# PHP CS Fixer cache
+.php-cs-fixer.cache
+
+# Symfony
+/var/
+/public/bundles/
+
+# Laravel
+/vendor/
+/node_modules/
+npm-debug.log
+yarn-error.log
+.env
+Homestead.yaml
+Homestead.json
+/.vagrant
+
+# Zend Framework 1
+/library/Zend/
+
+# Zend Framework 2
+/vendor/
+composer.phar
+composer.lock
+
+# Cache, logs, session files
+/cache/*
+/logs/*
+/session/*
+
+# CakePHP
+/tmp/cache/models/*
+/tmp/cache/persistent/*
+/tmp/cache/views/*
+/tmp/logs/*
+/tmp/sessions/*
+/tmp/tests/*
+/Vendor/
+/webroot/assets/
