@@ -6,7 +6,7 @@ composer.lock
 composer.phar
 
 # PHPStorm project files
-.idea/
+# .idea/
 
 # PHP unit test results
 .phpunit.result.cache
